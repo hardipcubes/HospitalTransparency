@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HospitalTransparencyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AdminPanelUserMaster">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Username" Type="nvarchar" MaxLength="100" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="ImagePath" Type="nvarchar(max)" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DeletedDate" Type="datetime" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="RoleId" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'HospitalTransparency.dbo.ApplicationMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="ApplicationMaster">
+    <Key>
+      <PropertyRef Name="ApplicationId" />
+      <PropertyRef Name="IsActive" />
+      <PropertyRef Name="IsDeleted" />
+      <PropertyRef Name="DisplayOrder" />
+    </Key>
+    <Property Name="ApplicationId" Type="int" Nullable="false" />
+    <Property Name="ApplicationName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ApplicationDesc" Type="nvarchar(max)" />
+    <Property Name="ApplicationLogo" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedOn" Type="datetime" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DeletedOn" Type="datetime" />
+    <Property Name="DisplayOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ErrorLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="URL" Type="nvarchar" MaxLength="500" />
+    <Property Name="ErrorMessage" Type="nvarchar(max)" />
+    <Property Name="StackTrace" Type="nvarchar(max)" />
+    <Property Name="CreatedOn" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MailSettings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="36" Nullable="false" />
+    <Property Name="FromEmail" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="FromName" Type="nvarchar" MaxLength="200" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ServerHost" Type="nvarchar" MaxLength="200" />
+    <Property Name="ServerPort" Type="int" />
+    <Property Name="SSL" Type="bit" Nullable="false" />
+    <Property Name="SRA" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MenuIcon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IconClass" Type="nvarchar" MaxLength="100" />
+    <Property Name="DisplayHTML" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="MenuMaster">
+    <Key>
+      <PropertyRef Name="MenuId" />
+    </Key>
+    <Property Name="MenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MenuName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ControllerName" Type="nvarchar" MaxLength="500" />
+    <Property Name="ActionName" Type="nvarchar" MaxLength="500" />
+    <Property Name="ParentId" Type="int" />
+    <Property Name="OrderBy" Type="int" />
+    <Property Name="MenuIcon" Type="int" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedOn" Type="datetime" />
+  </EntityType>
+  <EntityType Name="RightsMaster">
+    <Key>
+      <PropertyRef Name="RightsId" />
+    </Key>
+    <Property Name="RightsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MenuId" Type="int" />
+    <Property Name="Add" Type="bit" Nullable="false" />
+    <Property Name="Edit" Type="bit" Nullable="false" />
+    <Property Name="Delete" Type="bit" Nullable="false" />
+    <Property Name="Display" Type="bit" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="RoleId" Type="int" />
+  </EntityType>
+  <EntityType Name="RoleMaster">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoleDesc" Type="nvarchar(max)" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedOn" Type="datetime" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="DeletedOn" Type="datetime" />
+    <Property Name="DisplayOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <Function Name="Get_User_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GetMenuList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchFilter" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortCol" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortOrder" Type="nvarchar" Mode="In" />
+    <Parameter Name="SkipRows" Type="int" Mode="In" />
+    <Parameter Name="PerPage" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetRightsDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GetRoleList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchFilter" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortCol" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortOrder" Type="nvarchar" Mode="In" />
+    <Parameter Name="SkipRows" Type="int" Mode="In" />
+    <Parameter Name="PerPage" Type="int" Mode="In" />
+    <Parameter Name="RoleId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchFilter" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortCol" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortOrder" Type="nvarchar" Mode="In" />
+    <Parameter Name="SkipRows" Type="int" Mode="In" />
+    <Parameter Name="PerPage" Type="int" Mode="In" />
+    <Parameter Name="RoleId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Insert_ErrorLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="URL" Type="nvarchar" Mode="In" />
+    <Parameter Name="ErrorMessage" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="StackTrace" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetParentMenuByChildId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ParentId" Type="int" Mode="In" />
+    <Parameter Name="RoleId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_MenuRightsList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="HospitalTransparencyModelStoreContainer">
+    <EntitySet Name="AdminPanelUserMaster" EntityType="Self.AdminPanelUserMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MailSettings" EntityType="Self.MailSettings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MenuIcon" EntityType="Self.MenuIcon" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MenuMaster" EntityType="Self.MenuMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RightsMaster" EntityType="Self.RightsMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoleMaster" EntityType="Self.RoleMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ApplicationMaster" EntityType="Self.ApplicationMaster" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ApplicationMaster].[ApplicationId] AS [ApplicationId], 
+    [ApplicationMaster].[ApplicationName] AS [ApplicationName], 
+    [ApplicationMaster].[ApplicationDesc] AS [ApplicationDesc], 
+    [ApplicationMaster].[ApplicationLogo] AS [ApplicationLogo], 
+    [ApplicationMaster].[IsActive] AS [IsActive], 
+    [ApplicationMaster].[CreatedBy] AS [CreatedBy], 
+    [ApplicationMaster].[CreatedOn] AS [CreatedOn], 
+    [ApplicationMaster].[ModifiedBy] AS [ModifiedBy], 
+    [ApplicationMaster].[ModifiedOn] AS [ModifiedOn], 
+    [ApplicationMaster].[IsDeleted] AS [IsDeleted], 
+    [ApplicationMaster].[DeletedOn] AS [DeletedOn], 
+    [ApplicationMaster].[DisplayOrder] AS [DisplayOrder]
+    FROM [dbo].[ApplicationMaster] AS [ApplicationMaster]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,80 @@
+﻿@model HospitalTransparency.Models.Model.AdminUserModel
+
+@using (Ajax.BeginForm("AdminUser", "AdminUser", FormMethod.Post, new AjaxOptions { OnBegin = "onBegin();", OnSuccess = "Onsuccess();fnReset();", OnComplete = "datatablelist();", InsertionMode = InsertionMode.Replace, UpdateTargetId = "P_List" }, new { @class = "cmxform form-horizontal", @id = "commentForm", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => x.UserId)
+    @Html.HiddenFor(x => x.IsDeleted)
+    @Html.HiddenFor(x => x.IsActive)
+
+    <div class="form-group ">
+        <label for="RoleId" class="control-label col-lg-2">Role</label>
+        <div class="col-lg-3">
+            @Html.DropDownListFor(model => model.RoleId, (IEnumerable<SelectListItem>)ViewBag.RoleData, "Select Role", new { @class = "form-control", @required = "required", @name = "RoleId", @title = "Role is required." })
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <label for="Name" class="control-label col-lg-2">Full Name</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @name = "Full Name", @required = "required", @maxlength = "50", @title = "Fullname is required." })
+        </div>
+
+        <label for="Email" class="control-label col-lg-2">Email-Id</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @name = "Email-Id", @required = "required", @type = "email", @title = "Valid email-id is required." })
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <label for="Username" class="control-label col-lg-2">Username</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(model => model.Username, new { @maxlength = "50", @class = "form-control", @name = "Username", @required = "required", @onchange = "checkusername();", @title = "Username is required." })
+        </div>
+
+        <label for="Password" class="control-label col-lg-2">Password</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(model => model.Password, new { @maxlength = "50", @class = "form-control", @type = "password", @name = "Password", @required = "required", @title = "Password is required." })
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <label for="uploadImg" class="control-label col-lg-2">Image</label>
+        <div class="col-lg-3">
+            <input type="file" class="default" id="userFile" accept="image/png, image/jpeg" />
+
+            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px; margin-top:15px;">
+                @if (ViewBag.Edit != null && ViewBag.Edit == "Edit" && !string.IsNullOrWhiteSpace(ViewBag.UserImage))
+                {
+                    <img src="@ViewBag.UserImage" alt="" id="Image" />
+                }
+                else
+                {
+                    <img src="../Content/images/notavailable.png" alt="" id="Image" />
+                }
+            </div>
+
+        </div>
+        <div class="col-lg-7">
+            <div style="display:none;" id="divchange">
+                <span class="btn btn-white btn-file">
+                    <span class="fileupload-exists" onclick="$('#userFile').click();"><i class="fa fa-undo"></i> Change</span>
+                </span><br />
+                <a href="javascript:void(0);" class="btn btn-danger fileupload-exists" style="margin-top:10px;" onclick="RemoveImage();"><i class="fa fa-trash-o"></i> Remove</a>
+            </div>
+            <br />
+            <span class="label label-danger">NOTE!</span>
+            <span style="line-height:20px;">
+                Uploaded image thumbnail is
+                supported in Latest Firefox, Chrome, Opera,
+                Safari and Internet Explorer 10 only.
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-4 col-lg-6">
+            <button class="btn btn-primary ink-reaction" type="submit">Save</button>
+            <button class="btn btn-default ink-reaction" type="button" onclick="fnReset();OnComplete();scrolltop();">Cancel</button>
+        </div>
+    </div>
+}
+

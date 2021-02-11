@@ -1,0 +1,108 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@{
+    var name = ViewBag.Name;
+    var userId = ViewBag.UserId;
+    var userName = ViewBag.UserName;
+    var userImage = ViewBag.ImagePath;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="~/Content/images/favicon.png">
+    <title>Reset</title>
+
+    <!--Core CSS -->
+    <link href="~/Content/bs3/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!--external css-->
+    <link rel="stylesheet" type="text/css" href="~/js/gritter/css/jquery.gritter.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="lock-screen" onload="startTime()">
+    <div class="lock-wrapper">
+        <div id="time"></div>
+
+        <div class="lock-box text-center">
+            <div class="lock-name">@name</div>
+            <img src="..\\Content\\images\\reset.png" alt="lock avatar" />
+            <div class="lock-pwd">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="hidden" id="resetUId" class="form-control" name="uId" value="@userId">
+                        <input type="password" placeholder="new password" id="resetpassword" name="password" class="form-control lock-input" required>
+                        <button class="btn btn-lock ink-reaction" type="submit" onclick="ResetPassword();">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/jquery.js"></script>
+    <script src="~/Content/bs3/js/bootstrap.min.js"></script>
+    <script src="~/js/notie.js"></script>
+    <script src="~/js/linkReaction.js"></script>
+
+    <script>
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+            t = setTimeout(function () { startTime() }, 500);
+        }
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+
+        function ResetPassword() {
+            var userId = $("#resetUId").val();
+            var newPassword = $("#resetpassword").val();
+            if (newPassword == "") {
+                notie.alert(3, 'Please enter new password.. :(', 2);
+                return false;
+            }
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("ResetPassword")',
+                datatype: 'html',
+                data: { userId: userId, password: newPassword },
+                success: function (i) {
+                    var status = i.status;
+                    if (i.status == "1") {
+                        notie.alert(1, 'Your password has been reset successfully!', 2);
+                        setTimeout(function () { window.location.href = "/Login/Login" }, 500000);
+                    }
+                    else {
+                        notie.alert(3, 'Some error occured..', 2);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

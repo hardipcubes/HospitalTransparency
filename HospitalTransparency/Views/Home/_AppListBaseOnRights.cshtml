@@ -1,0 +1,28 @@
+﻿@model List<HospitalTransparency.Models.Model.ApplicationResultModel>
+<div class="row">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div class="top-stats-panel">
+                            <div class="gauge-canvas">
+                                <h4 class="widget-h">@item.ApplicationName</h4>
+                                <a href="/login/RedirectAnotherApp?path=@item.ApplicationDomain"><img src="@item.ApplicationLogo"></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-md-12">
+            <p>No applications available. please contact your admin for more information.</p>
+        </div>
+    }
+</div>
+

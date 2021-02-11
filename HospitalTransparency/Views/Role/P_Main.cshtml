@@ -1,0 +1,26 @@
+﻿@model HospitalTransparency.Models.Model.RoleModel
+
+@using (Ajax.BeginForm("Role", "Role", FormMethod.Post, new AjaxOptions { OnSuccess = "Onsuccess();fnReset();OnComplete();", OnComplete = "datatablelist();", InsertionMode = InsertionMode.Replace, UpdateTargetId = "P_List" }, new { @class = "cmxform form-horizontal", @id = "commentForm", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.RoleId)
+    
+    <div class="form-group ">
+        <label for="cname" class="control-label col-lg-3">Role Name</label>
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.RoleName, new { @required = "required", @class = "form-control ", @name = "RoleName", @maxlength = "25", @minlength = "2", @title = "Role name is required." })
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="cemail" class="control-label col-lg-3">Description</label>
+        <div class="col-lg-6">
+            @Html.TextAreaFor(m => m.RoleDesc, new { @required = "required", @class = "form-control", @row = "1", @name = "Description", @maxlength = "500", @minlength = "2", @title = "Role description is required." })
+            <label id="textarea_desc" class="control-label"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            <button class="btn btn-primary ink-reaction" type="submit">Save</button>
+            <button class="btn btn-default ink-reaction" type="button" onclick="fnReset();OnComplete();scrolltop();">Cancel</button>
+        </div>
+    </div>
+}

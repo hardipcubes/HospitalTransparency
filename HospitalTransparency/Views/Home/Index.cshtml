@@ -1,0 +1,129 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home Page";
+}
+
+<script src="~/Script/highcharts/highcharts.js"></script>
+<script src="~/js/draggable-portlet.js"></script>
+<!--mini statistics start-->
+<div class="CheckActive" id="@ViewBag.ParentMenuId+@ViewBag.MenuId">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="mini-stat clearfix">
+                <span class="mini-stat-icon orange"><i class="fa fa-gavel"></i></span>
+                <div class="mini-stat-info">
+                    <span>320</span>
+                    New Order Received
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat clearfix">
+                <span class="mini-stat-icon tar"><i class="fa fa-tag"></i></span>
+                <div class="mini-stat-info">
+                    <span>22,450</span>
+                    Copy Sold Today
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat clearfix">
+                <span class="mini-stat-icon pink"><i class="fa fa-money"></i></span>
+                <div class="mini-stat-info">
+                    <span>34,320</span>
+                    Dollar Profit Today
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat clearfix">
+                <span class="mini-stat-icon green"><i class="fa fa-eye"></i></span>
+                <div class="mini-stat-info">
+                    <span>32720</span>
+                    Unique Visitors
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <!--notification start-->
+            <section class="panel">
+                <header class="panel-heading">
+                    Notification <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        <a href="javascript:;" class="fa fa-cog"></a>
+                        <a href="javascript:;" class="fa fa-times"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="alert alert-info clearfix">
+                        <span class="alert-icon"><i class="fa fa-envelope-o"></i></span>
+                        <div class="notification-info">
+                            <ul class="clearfix notification-meta">
+                                <li class="pull-left notification-sender"><span><a href="#">Jonathan Smith</a></span> send you a mail </li>
+                                <li class="pull-right notification-time">1 min ago</li>
+                            </ul>
+                            <p>
+                                Urgent meeting for next proposal
+                            </p>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger">
+                        <span class="alert-icon"><i class="fa fa-facebook"></i></span>
+                        <div class="notification-info">
+                            <ul class="clearfix notification-meta">
+                                <li class="pull-left notification-sender"><span><a href="#">Jonathan Smith</a></span> mentioned you in a post </li>
+                                <li class="pull-right notification-time">7 Hours Ago</li>
+                            </ul>
+                            <p>
+                                Very cool photo jack
+                            </p>
+                        </div>
+                    </div>
+                    <div class="alert alert-success ">
+                        <span class="alert-icon"><i class="fa fa-comments-o"></i></span>
+                        <div class="notification-info">
+                            <ul class="clearfix notification-meta">
+                                <li class="pull-left notification-sender">You have 5 message unread</li>
+                                <li class="pull-right notification-time">1 min ago</li>
+                            </ul>
+                            <p>
+                                <a href="#">Anjelina Mewlo, Jack Flip</a> and <a href="#">3 others</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning ">
+                        <span class="alert-icon"><i class="fa fa-bell-o"></i></span>
+                        <div class="notification-info">
+                            <ul class="clearfix notification-meta">
+                                <li class="pull-left notification-sender">Domain Renew Deadline 7 days ahead</li>
+                                <li class="pull-right notification-time">5 Days Ago</li>
+                            </ul>
+                            <p>
+                                Next 5 July Thursday is the last day
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--notification end-->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myWidgetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Click and go to another application</h4>
+            </div>
+            <div id="app-setting" class="modal-body">
+                @Html.Action("AppListBaseOnRights", "Home")
+            </div>
+        </div>
+    </div>
+</div>

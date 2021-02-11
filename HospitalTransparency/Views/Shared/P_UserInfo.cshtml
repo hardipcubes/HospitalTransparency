@@ -1,0 +1,53 @@
+﻿@{
+    var name = Session["Name"] != null ? Session["Name"].ToString() : "--/--";
+    var userId = Session["UserId"] != null ? Session["UserId"].ToString() : "0";
+    var userImage = Session["Image"] != null ? Session["Image"].ToString() : "..\\Content\\images\\User.png";
+    string corelink = System.Web.Configuration.WebConfigurationManager.AppSettings["core"];
+
+    var model = Session["ApplicationList"] as List<HospitalTransparency.Models.Model.ApplicationResultModel>;
+}
+
+@if (model != null && model.Count > 0)
+{
+    <ul class="nav top-menu pull-right moreapps-img">
+        <li id="header_moreapps_list" class="dropdown custom_dropmenu">
+            <img src="~/Content/images/more-apps.png" data-toggle="dropdown" data-target="#myMoreAppsModal" style="width:25px; cursor:pointer;border-radius:0px;" />
+            <div class="dropdown-menu" id="myMoreAppsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width:440px;">
+                    <div class="modal-content">
+                        <div id="app-setting" class="modal-body">
+                            @foreach (var item in model)
+                            {
+                                <div class="col-md-4">
+                                    <section class="panel">
+                                        <div class="panel-body">
+                                            <div class="top-stats-panel">
+                                                <div class="gauge-canvas">
+                                                    <a href="/login/RedirectAnotherApp?path=@item.ApplicationDomain&controllerPath=@item.ControllerPath&appId=@item.ApplicationId"><img style="max-width:75px;" src="@item.ApplicationLogo"></a>
+                                                    <h4 class="widget-h">@item.ApplicationName</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+}
+<ul class="nav pull-right top-menu">
+    <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <img alt="" src="@userImage">
+            <span class="username">@name</span>
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu extended logout">
+            <li><a href="/Login/Lock?UserId=@userId"><i class="fa fa-lock"></i> Lock</a></li>
+            <li><a href="/Login/Logout"><i class="fa fa-key"></i> Log Out</a></li>
+        </ul>
+    </li>
+</ul>

@@ -1,0 +1,40 @@
+﻿@model List<HospitalTransparency.Models.Model.RightsListModel>
+
+<ul class="sub">
+    @foreach (var item in Model)
+    {
+
+        string cls = "";
+        string acls = "";
+        string icon = "fa fa-angle-right";
+        if (item.Children.Count() > 0)
+        {
+            cls = "sub-menu dcjq-parent-li";
+            icon = "fa fa-angle-double-right";
+        }
+        <li class="@cls" id="P_@item.MenuId">
+
+            @if (item.ControllerName == null)
+            {
+                <a class="@acls" href="javascript:;">
+                    <i class="@icon"></i>
+                    <span>@item.MenuName</span>
+                </a>
+            }
+            else
+            {
+                <a class="@acls" href="@Url.Action(item.ActionName, @item.ControllerName)">
+                    <i class="@icon"></i>
+                    <span>@item.MenuName</span>
+                </a>
+            }
+            @{
+                if (item.Children.Count() > 0)
+                {
+                    Html.RenderPartial("P_SubMenu", item.Children);
+                }
+            }
+        </li>
+
+    }
+</ul>

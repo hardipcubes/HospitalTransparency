@@ -1,0 +1,25 @@
+﻿<input type="hidden" id="SuccessMessage" value="@ViewBag.SuccessMessage" />
+<input type="hidden" id="ErrorMessage" value="@ViewBag.ErrorMessage" />
+
+<section id="unseen">
+    <table id="roleTable" class="display table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="select-all" name="selectAll" value="" /> <label for="select-all">All</label></th>
+                <th>Role Name</th>
+                <th>Description</th>
+                <th>Active</th>
+                <th>Edit / Delete</th>
+            </tr>
+        </thead>
+        <tbody class="tbodycheckbox"></tbody>
+         
+    </table>
+</section>
+
+<div class="form-group">
+    <div class="col-lg-offset-3 col-lg-6">
+        <button class="btn btn-primary ink-reaction" type="submit" onclick="DeleteAll();">Delete All</button>
+        <button class="btn btn-default ink-reaction" type="button" onclick="fnReset();OnComplete();scrolltop();">Cancel</button>
+    </div>
+</div>

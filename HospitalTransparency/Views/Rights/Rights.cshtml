@@ -1,0 +1,361 @@
+﻿@model List<HospitalTransparency.Models.Model.DisplayMenuModel>
+@{
+    ViewBag.Title = "Rights";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<input type="hidden" id="SuccessMessage" value="@ViewBag.SuccessMessage" />
+<input type="hidden" id="ErrorMessage" value="@ViewBag.ErrorMessage" />
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="breadcrumbs-alt">
+            <li>
+                <a href="/Home/Index">Home</a>
+            </li>
+            <li>
+                <a href="#">Role Rights</a>
+            </li>
+            <li>
+                <a class="current" href="#">Manage Rights</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="CheckActive" id="@ViewBag.ParentMenuId+@ViewBag.MenuId">
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Rights
+                    <span class="tools pull-right">
+                        <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        <a class="fa fa-times" href="javascript:;"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="form">
+                        <div id="P_Main">
+                            @Html.Partial("P_Main", Model)
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/jquery-1.8.3.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#rightMenuList').dataTable({
+            "bPaginate": false,
+            "bInfo": false,
+            "bFilter": false,
+            "aoColumnDefs": [
+               { 'bSortable': false, 'aTargets': [1, 2, 3, 4, 5] }
+            ],
+        });
+    });
+
+    $('#uncheckAll').click(function () {
+        $('input:checkbox').prop('checked', false);
+        $('span').removeClass('checked');
+    });
+
+    $("#checkAll").click(function () {
+        $('input:checkbox').prop('checked', true);
+        $('span').addClass('checked');
+    });
+
+    function resetlist() {
+        document.getElementById("RoleId").value = "";
+        var table = document.getElementById("rights_list");
+        $('input:checkbox').prop('checked', false);
+    }
+
+    function Filtermenulist() {
+        var roleid = document.getElementById("RoleId").value;
+        if (roleid != "") {
+            $.ajax({
+                cache: false,
+                type: 'Get',
+                url: '@Url.Action("MenuListFilter", "Rights")',
+                datatype: 'html',
+                data: { roleId: roleid },
+                success: function (ilist) {
+
+                    if (ilist.length > 0) {
+                        $.each(ilist, function (k, ilist) {
+                            var isExists = document.getElementById(ilist.MenuId + '+All');
+                            if (isExists) {
+                                if (ilist.Add == true && ilist.Delete == true && ilist.Edit == true && ilist.Display == true) {
+                                    isExists.checked = true;
+                                }
+                                else {
+                                    isExists.checked = false;
+                                }
+                            }
+
+                            var isExists = document.getElementById(ilist.MenuId + '+Add');
+                            if (isExists) {
+                                if (ilist.Add == true) {
+                                    isExists.checked = true;
+                                }
+                                else {
+                                    isExists.checked = false;
+                                }
+                            }
+
+                            var isExists = document.getElementById(ilist.MenuId + '+Edit');
+                            if (isExists) {
+                                if (ilist.Edit == true) {
+                                    isExists.checked = true;
+                                }
+                                else {
+                                    isExists.checked = false;
+                                }
+                            }
+
+                            var isExists = document.getElementById(ilist.MenuId + '+Delete');
+                            if (isExists) {
+                                if (ilist.Delete == true) {
+                                    isExists.checked = true;
+                                }
+                                else {
+                                    isExists.checked = false;
+                                }
+                            }
+
+                            var isExists = document.getElementById(ilist.MenuId + '+Display');
+                            if (isExists) {
+                                if (ilist.Display == true) {
+                                    isExists.checked = true;
+                                }
+                                else {
+                                    isExists.checked = false;
+                                }
+                            }
+                        })
+                    }
+                    else {
+                        $('input:checkbox').prop('checked', false);
+                    }
+                }
+            });
+        }
+        else {
+            $('input:checkbox').prop('checked', false);
+        }
+    }
+
+    function checkallthis(menuid, type) {
+
+        var all = menuid + '+All';
+        var add = menuid + '+Add';
+        var edit = menuid + '+Edit';
+        var del = menuid + '+Delete';
+        var display = menuid + '+Display';
+        if (type == 'p') {
+            if (document.getElementById(all).checked == true) {
+                document.getElementById(add).checked = true;
+                document.getElementById(edit).checked = true;
+                document.getElementById(del).checked = true;
+                document.getElementById(display).checked = true;
+            } else {
+
+                document.getElementById(add).checked = false;
+                document.getElementById(edit).checked = false;
+                document.getElementById(del).checked = false;
+                document.getElementById(display).checked = false;
+            }
+        }
+        else {
+            if (
+                document.getElementById(add).checked == true &&
+                document.getElementById(edit).checked == true &&
+                document.getElementById(del).checked == true &&
+                document.getElementById(display).checked == true
+                ) {
+                document.getElementById(all).checked = true;
+            } else {
+                document.getElementById(all).checked = false;
+            }
+        }
+    }
+
+    function SaveList() {
+        var roleid = document.getElementById("RoleId").value;
+        if (roleid == "") {
+            notie.alert(3, 'Please select role first. :(', 2)
+            $('input:checkbox').prop('checked', false);
+            return false;
+        }
+        var data = [];
+        var field = ["+Add", "+Edit", "+Delete", "+Display"]
+        $('input:hidden[id=MenuId]').each(function (k) {
+            var id = $(this).val();
+            var menuselection = id
+            for (var i = 0; i < field.length; i++) {
+                var isExists = document.getElementById(id + field[i]);
+                if (isExists) {
+                    if (isExists.checked == true) {
+                        menuselection += "," + true;
+                    }
+                    else {
+                        menuselection += "," + false;
+                    }
+                }
+            }
+            data.push(menuselection);
+        });
+
+        SaveRightsData(roleid, data);
+    }
+
+    function SaveRightsData(role, data) {
+        $.ajax({
+            cache: false,
+            url: '@Url.Action("AddRights", "Rights")',
+            type: 'Post',
+            data: {
+                'roleId': role,
+                'menuData': data
+            },
+            traditional: true,
+            success: function (status) {
+                if (status) {
+                    notie.alert(1, 'Rights updated successfully. :)', 2)
+                } else {
+                    notie.alert(3, 'Something goes wrong! :(', 2)
+                }
+            },
+            error: function () {
+                notie.alert(3, 'Some error occured. :(', 2)
+            }
+        });
+    }
+
+    function ManageRootMenu(menuid) {
+        var roleid = document.getElementById("RoleId").value;
+        if (roleid == "") {
+            notie.alert(3, 'Please select role first. :(', 2)
+            $('input:checkbox').prop('checked', false);
+            return false;
+        }
+        $.ajax({
+            cache: false,
+            url: '@Url.Action("ManageRootMenu", "Rights")',
+            type: 'Post',
+            data: {
+                'RoleId': roleid,
+                'MenuId': menuid
+            },
+            traditional: true,
+            success: function (ilist) {
+
+                if (ilist.length > 0) {
+                    var i = 0;
+                    var parent = "";
+                    $.each(ilist, function (k, ilist) {
+                        parent = ilist.ParentId;
+                        var isExists = document.getElementById(ilist.MenuId + '+Add');
+                        if (isExists) {
+                            if (isExists.checked == true) {
+                                i = 1;
+                                var all = parent + '+All';
+                                var add = parent + '+Add';
+                                var edit = parent + '+Edit';
+                                var del = parent + '+Delete';
+                                var display = parent + '+Display';
+                                document.getElementById(all).checked = true
+                                document.getElementById(add).checked = true;
+                                document.getElementById(edit).checked = true;
+                                document.getElementById(del).checked = true;
+                                document.getElementById(display).checked = true;
+                                return
+                            }
+                        }
+                        //Edit
+                        var isExists = document.getElementById(ilist.MenuId + '+Edit');
+                        if (isExists) {
+                            if (isExists.checked == true) {
+                                i = 1;
+                                var all = parent + '+All';
+                                var add = parent + '+Add';
+                                var edit = parent + '+Edit';
+                                var del = parent + '+Delete';
+                                var display = parent + '+Display';
+                                document.getElementById(all).checked = true
+                                document.getElementById(add).checked = true;
+                                document.getElementById(edit).checked = true;
+                                document.getElementById(del).checked = true;
+                                document.getElementById(display).checked = true;
+                                return
+
+                            }
+                        }
+                        //Delete
+                        var isExists = document.getElementById(ilist.MenuId + '+Delete');
+                        if (isExists) {
+                            if (isExists.checked == true) {
+                                i = 1;
+                                var all = parent + '+All';
+                                var add = parent + '+Add';
+                                var edit = parent + '+Edit';
+                                var del = parent + '+Delete';
+                                var display = parent + '+Display';
+                                document.getElementById(all).checked = true
+                                document.getElementById(add).checked = true;
+                                document.getElementById(edit).checked = true;
+                                document.getElementById(del).checked = true;
+                                document.getElementById(display).checked = true;
+                                return
+
+                            }
+
+                        }
+                        //Display
+                        var isExists = document.getElementById(ilist.MenuId + '+Display');
+                        if (isExists) {
+                            if (isExists.checked == true) {
+                                i = 1;
+                                var all = parent + '+All';
+                                var add = parent + '+Add';
+                                var edit = parent + '+Edit';
+                                var del = parent + '+Delete';
+                                var display = parent + '+Display';
+                                document.getElementById(all).checked = true
+                                document.getElementById(add).checked = true;
+                                document.getElementById(edit).checked = true;
+                                document.getElementById(del).checked = true;
+                                document.getElementById(display).checked = true;
+                                return
+                            }
+
+                        }
+                    });
+
+                    if (i == 0) {
+                        var all = parent + '+All';
+                        var add = parent + '+Add';
+                        var edit = parent + '+Edit';
+                        var del = parent + '+Delete';
+                        var display = parent + '+Display';
+                        document.getElementById(all).checked = false
+                        document.getElementById(add).checked = false;
+                        document.getElementById(edit).checked = false;
+                        document.getElementById(del).checked = false;
+                        document.getElementById(display).checked = false;
+                    }
+                }
+            },
+            error: function () {
+                notie.alert(3, 'Some error occured. :(', 2)
+                $("#divLoading").css("display", "none");
+            }
+        });
+    }
+</script>
+

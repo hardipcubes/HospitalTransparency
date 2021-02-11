@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Transparency</title>
+
+    <!--Core CSS -->
+    <link href="~/Content/bs3/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!--external css-->
+    <link rel="stylesheet" type="text/css" href="~/js/gritter/css/jquery.gritter.css" />
+
+    <link href="~/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+    <link href="~/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/js/data-tables/DT_bootstrap.css" />
+    <link href="~/Content/css/table-responsive.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="~/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .thumbnail > img, .thumbnail a > img {
+            display: inline-block;
+            max-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <section id="container">
+        <!--header start-->
+        <header class="header fixed-top clearfix">
+            <!--logo start-->
+            <div class="brand">
+                <a href="/Home/Index" class="logo">
+                    <img src="~/Content/images/logo.png" alt="">
+                </a>
+                <div class="sidebar-toggle-box">
+                    <div class="fa fa-bars"></div>
+                </div>
+            </div>
+            <!--logo end-->
+            <div class="nav notify-row" style="float:right;" id="top_menu"> 
+                <!--  notification start -->
+                @Html.Partial("P_Notification")
+                <!--  notification end -->
+            </div>
+            <div class="top-nav clearfix">
+                <!--search & user info start-->
+                @Html.Partial("P_UserInfo")
+                <!--search & user info end-->
+            </div>
+        </header>
+        <!--header end-->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse">
+                <!-- sidebar menu start-->
+                @Html.Partial("P_Menu")
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                @RenderBody()
+            </section>
+        </section>
+        <!--main content end-->
+    </section>
+
+    <div id="divLoading" style="display: none;">
+        <div style="width: 100%; height: 100%; z-index: 10000; position: fixed; top: 0; left: 0px; float: left; background-color: #333333; opacity: 0.9;">
+            <div style="margin: 15% auto;width: 350px;white-space: nowrap;text-align: center;z-index: 1000;">
+                <span style="text-align: center;">
+                    <img src="/Content/images/loading.gif" style="width:50%;height:100%;">
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!--Core js-->
+    <script src="~/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/Content/bs3/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript" src="~/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="~/js/jquery.nicescroll.js"></script>
+
+    <!--dynamic table-->
+    <script type="text/javascript" language="javascript" src="~/js/advanced-datatable/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="~/js/data-tables/DT_bootstrap.js"></script>
+
+    <!--alert-->
+    <script src="~/js/notie.js"></script>
+
+    <!--common script init for all pages-->
+    <script src="~/js/scripts.js"></script>
+    <script src="~/js/validation-init.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var findctr = document.getElementsByClassName('CheckActive');
+            if (findctr != undefined && findctr.length > 0) {
+                SetActiveMenu(findctr[0].id);
+                console.log(findctr[0].id);
+            }
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

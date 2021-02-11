@@ -1,0 +1,29 @@
+﻿@model HospitalTransparency.Models.Model.MenuModel
+@{
+    int count = 0;
+}
+
+<section id="web-application">
+    <div class="row fontawesome-icon-list">
+        @foreach (var i in Model.MenuList)
+        {
+            <div class="fa-hover col-md-3 col-sm-4" onclick="clickeicons('@i.Value','@i.Text')"><a href="#"><i class="@i.Text"></i> @i.Text.Replace("fa fa", "fa")</a></div>
+        }
+    </div>
+</section>
+<script>
+    function clickeicons(e, icon) {
+        $.ajax({
+            url: '/Menu/ClickMenuIcons',
+            data: { Menuiconid: e },
+            error: function () {
+                notie.alert(3, 'An error has occurred :(', 2)
+            },
+            success: function (data) {
+                $('#myModal').modal('hide');
+                document.getElementById('selectedi').className = icon;
+            },
+        });
+    }
+</script>
+

@@ -1,0 +1,137 @@
+﻿@model List<HospitalTransparency.Models.Model.DisplayMenuModel>
+
+@using (Ajax.BeginForm("Rights", "Rights", FormMethod.Post, new AjaxOptions { OnBegin = "fnvalidation", OnSuccess = "Onsuccess", OnComplete = "resetlist", InsertionMode = InsertionMode.Replace, UpdateTargetId = "_List" }, new { @class = "cmxform form-horizontal", enctype = "multipart/form-data", id = "commentForm" }))
+{
+    <div class="form-group">
+        <label for="RoleId" class="control-label col-lg-3">Role</label>
+        <div class="col-lg-6">
+            @if (ViewBag.roleList != null)
+            {
+                @Html.DropDownListFor(model => Model.ToList().First().RoleId, (IEnumerable<SelectListItem>)ViewBag.roleList, "Select Role", new { id = "RoleId", @class = "form-control", @required = "required", @title = "Please select role.", @onchange = "Filtermenulist();" })
+            }
+            else
+            {
+                <select id="RoleId" class="form-control" required>
+                    <option></option>
+                </select>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            <input type="button" class="btn btn-primary ink-reaction" id="checkAll" title="unselect all" value="Select all" />
+            <input type="button" class="btn btn-default ink-reaction" id="uncheckAll" title="select all" value="Unselect all" />
+        </div>
+    </div>
+
+    <div class="ibox-content">
+        <div class="table-responsive">
+            <table id="rightTable" class="display table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="display:none; visibility:hidden;"> 1 </th>
+                        <th>Menu Name</th>
+                        <th class="center">All</th>
+                        <th class="center">Add</th>
+                        <th class="center">Edit</th>
+                        <th class="center">Delete</th>
+                        <th class="center">Display</th>
+                    </tr>
+                </thead>
+
+                <tbody id="rights_list">
+                    @foreach (var item in Model.OrderBy(m => m.OrderBy))
+                    {
+                         int lvl = item.MenuLevel+1;
+                        <tr>
+                            <td style="display:none;">1</td>
+                            <td>
+
+                                <span class="btn btn-primary btn-xs" style="margin-left:10px;">
+                                    @lvl.@Model[0].SrNo => @item.MenuName
+                                </span>
+                                @{
+                                    Model[0].SrNo = Model[0].SrNo + 1;
+                                }
+
+                                <input type="hidden" id="MenuId" value="@item.MenuId" />
+                            </td>
+                            <td class="center">
+                                <input type="checkbox" id="@item.MenuId+All" name="All" onclick="checkallthis('@item.MenuId','p');ManageRootMenu('@item.MenuId');" />
+                                <label for="@item.MenuId+All"></label>
+                            </td>
+                            <td class="center">
+                                @if (item.Children.Count() > 0)
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Add" name="Add" />
+                                    <label for="@item.MenuId+Add"></label>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Add" name="Add" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                                    <label for="@item.MenuId+Add"></label>
+                                }
+                            </td>
+                            <td class="center">
+                                @if (item.Children.Count() > 0)
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Edit" name="Edit" />
+                                    <label for="@item.MenuId+Edit"></label>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Edit" name="Edit" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                                    <label for="@item.MenuId+Edit"></label>
+                                }
+                            </td>
+                            <td class="center">
+                                @if (item.Children.Count() > 0)
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Delete" name="Delete" />
+                                    <label for="@item.MenuId+Delete"></label>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Delete" name="Delete" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                                    <label for="@item.MenuId+Delete"></label>
+                                }
+                            </td>
+                            <td class="center">
+                                @if (item.Children.Count() > 0)
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Display" name="Display" />
+                                    <label for="@item.MenuId+Display"></label>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="@item.MenuId+Display" name="Display" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                                    <label for="@item.MenuId+Display"></label>
+                                }
+                            </td>
+                        </tr>
+
+                        if (item.Children.Count() > 0)
+                        {
+                            @Html.Partial("P_SubMain", item.Children)
+                        }
+                    }
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            @if (ViewBag.RightAdd == "True")
+            {
+                <input type="button" class="btn btn-primary ink-reaction" id="validateBtn" value="Save" onclick="SaveList();">
+            }
+        </div>
+    </div>
+}
+
+
+

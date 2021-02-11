@@ -1,0 +1,280 @@
+﻿@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="breadcrumbs-alt">
+            <li>
+                <a href="/Home/Index">Home</a>
+            </li>
+            <li>
+                <a href="#">Role Rights</a>
+            </li>
+            <li>
+                <a class="current" href="#">Manage Menu</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="CheckActive" id="@ViewBag.ParentMenuId+@ViewBag.MenuId">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Menu
+                    <span class="tools pull-right">
+                        <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        <a class="fa fa-times" href="javascript:;"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="form">
+                        <div id="P_Main">
+                            @Html.Partial("P_Main")
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Menu Listing
+                    <span class="tools pull-right">
+                        <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        <a class="fa fa-times" href="javascript:;"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="adv-table">
+                        <div id="P_List">
+                            @Html.Partial("P_List")
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/jquery-1.8.3.min.js"></script>
+
+<script type="text/javascript">
+
+    function onlyNos(e, t) {
+        try {
+            var charCode;
+            if (window.event) {
+                charCode = window.event.keyCode;
+            } else if (e) {
+                charCode = e.which;
+            } else { return true; }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+        catch (err) {
+            alert(err.Description);
+        }
+    }
+
+    function displayicon() {
+        var classname = $("#MenuIcon :selected").text();
+        $("#displayicon").addClass(classname);
+    }
+
+    $(document).ready(function () {
+        datatablelist();
+        OnComplete();
+
+        $(document).on('click', '#GetMenuicons', function(){
+        //$('#GetMenuicons').click(function () {
+            $.ajax({
+                url: '/Menu/MenuIconList',
+                data: {},
+                error: function () {
+                    $('#info').html('<p>An error has occurred</p>');
+                },
+                success: function (data) {
+                    $('#menuicons').html(data);
+                },
+            });
+        });
+
+        if (document.getElementById('MenusName')) { document.getElementById('MenusName').focus(); }
+    });
+
+    function SetActiveDeactive(id, active) {
+        var msg = "activate";
+        if (active == 'Y') {
+            msg = "de-activate";
+        }
+        var confimMessage = "Are you sure you want to " + msg + " this menu?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                url: '@Url.Action("SetActiveDeactive", "Role")',
+                datatype: 'html',
+                data: { MenuId: id },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    var message = "Menu " + msg + "d successfully. :)";
+                    notie.alert(1, message, 2)
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+
+        var msg = "active";
+        if (active == 'Y') {
+            msg = "inactive";
+        }
+    };
+
+    function DeleteMenu(MenuId) {
+        var confimMessage = "Are you sure you want to delete this role?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                datatype: 'html',
+                url: '@Url.Action("DeleteMenu", "Menu")',
+                data: { MenuId: MenuId },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    fnReset();
+                    OnComplete();
+                    var message = "Menu deleted successfully. :)";
+                    notie.alert(1, message, 2)
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+    }
+</script>
+
+<script type="text/javascript">
+
+    function datatablelist() {
+        $('#errormsg').empty();
+        $('#menuTable').dataTable({
+            "filter": true,
+            "aoColumnDefs": [
+               { 'bSortable': false, 'aTargets': [0, 6] }
+            ],
+            "aoColumns": [
+            { "sWidth": "10%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "5%" },
+            { "sWidth": "5%" },
+            { "sWidth": "10%" }
+            ],
+            "bPaginate": true,
+            "bLengthChange": true,
+            "pagingType": "full_numbers",
+            "orderClasses": false,
+            "order": [],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "@Url.Action("fnPaging")",
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                aoData.push(
+                    { "name": "MenuName", "value": '' },
+                    { "name": "ControllerName", "value": '' },
+                    { "name": "ActionName", "value": '' },
+                    { "name": "OrderBy", "value": '' },
+                    { "name": "Active", "value": '' },
+                    { "name": "Action", "value": '' });
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": "@Url.Action("fnPaging")",
+                    "data": aoData,
+                    "success": function (sb) {
+                        oldfeeds = sb.recordsTotal;
+                        fnCallback(sb);
+                        $("#menuTable").show();
+                        $('#_manualcount').empty();
+                        $('#_manualcount').append('New(0), Retrived(' + oldfeeds + ')');
+                    },
+                    error: function (xhr, textStatus, error) {
+                        if (typeof console == "object") {
+                            console.log(xhr.status + "," + xhr.responseText + "," + textStatus + "," + error);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function OnComplete() {
+        if (document.getElementById('selectedi'))
+            document.getElementById('selectedi').className = '';
+    }
+
+    function ValidateImage() {
+        var className = document.getElementById('selectedi').className;
+        if (className == "" && $('#ParentMenuId').val() == "") {
+            notie.alert(3, 'Please select Menu Icon !! :(', 2)
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function DeleteAll() {
+        var menuIds = "";
+        menuIds = getCheckedBoxes("checkbox");
+        if (menuIds == "") {
+            notie.alert(3, 'Please select menus to delete. :(', 2);
+            return false;
+        }
+        var confimMessage = "Are you sure you want to delete these selected menus?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                datatype: 'html',
+                url: '@Url.Action("DeleteAll")',
+                data: { menuIds: menuIds },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    fnReset();
+                    Onsuccess();
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+    }
+
+    function getCheckedBoxes(chkboxName) {
+        debugger;
+        var checkboxes = document.getElementsByClassName(chkboxName);
+        var checkboxesChecked = "";
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                checkboxesChecked = checkboxesChecked + (checkboxes[i].id.replace('chk_', '')) + ',';
+            }
+        }
+        return checkboxesChecked;
+    }
+</script>

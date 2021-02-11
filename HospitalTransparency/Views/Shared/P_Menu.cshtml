@@ -1,0 +1,195 @@
+﻿@{
+    List<HospitalTransparency.Models.Model.RightsListModel>
+    menuList = ViewBag.MenuRightsList;
+}
+
+<div class="leftside-navigation">
+    <ul class="sidebar-menu" id="nav-accordion">
+
+        @if (menuList != null && menuList.Count > 0)
+        {
+            foreach (var item in menuList)
+            {
+                string cls = "";
+                string acls = "";
+                if (item.Children.Count() > 0)
+                {
+                    cls = "sub-menu dcjq-parent-li";
+                }
+                <li class="@cls" id="P_@item.MenuId">
+
+                    @if (item.ControllerName == null)
+                    {
+                        <a class="@acls" href="javascript:;">
+                            <i class="fa fa-bars"></i>
+                            <span>@item.MenuName</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a  class="@acls" href="@Url.Action(item.ActionName, @item.ControllerName)">
+                            <i class="fa fa-bars"></i>
+                            <span>@item.MenuName</span>
+                        </a>
+                    }
+
+                    @if (item.Children.Count() > 0)
+                    {
+                        @Html.Partial("P_SubMenu", item.Children)
+                    }
+                </li>
+            }
+        }
+    </ul>
+
+    @*<ul class="sidebar-menu" id="nav-accordion">
+            <li class="lilist" id="P_Index">
+                <a class="active" href="/Home/Index">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard1</span>
+                </a>
+            </li>
+            <li class="lilist" id="P_Role">
+                <a class="active" href="/Role/Role">
+                    <i class="fa fa-users"></i>
+                    <span>Role</span>
+                </a>
+            </li>
+            <li class="lilist" id="P_Rights">
+                <a class="active" href="/Rights/Rights">
+                    <i class="fa fa-scissors"></i>
+                    <span>Rights</span>
+                </a>
+            </li>
+            <li class="lilist" id="P_AdminUser">
+                <a class="active" href="/AdminUser/AdminUser">
+                    <i class="fa fa-user"></i>
+                    <span>User Master</span>
+                </a>
+            </li>
+            <li class="sub-menu lilist">
+                <a href="javascript:;">
+                    <i class="fa fa-laptop"></i>
+                    <span>Layouts</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist">
+                        <a href="boxed_page.html">Boxed Page</a>
+                        <ul class="sub">
+                            <li class="Sublilist">
+                                <a href="boxed_page.html">Page-1</a>
+                                <ul class="sub">
+                                    <li class="Sublilist"><a href="boxed_page.html">Field-1</a></li>
+                                    <li class="Sublilist"><a href="horizontal_menu.html">Field-2</a></li>
+                                    <li class="Sublilist"><a href="language_switch.html">Field-3</a></li>
+                                </ul>
+                            </li>
+                            <li class="Sublilist"><a href="horizontal_menu.html">Page-2</a></li>
+                            <li class="Sublilist"><a href="language_switch.html">Page-3</a></li>
+                        </ul>
+                    </li>
+                    <li class="Sublilist"><a href="horizontal_menu.html">Horizontal Menu</a></li>
+                    <li class="Sublilist"><a href="language_switch.html">Language Switch Bar</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist">
+                <a href="javascript:;">
+                    <i class="fa fa-book"></i>
+                    <span>UI Elements</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist"><a href="general.html">General</a></li>
+                    <li class="Sublilist"><a href="buttons.html">Buttons</a></li>
+                    <li class="Sublilist"><a href="typography.html">Typography</a></li>
+                    <li class="Sublilist"><a href="widget.html">Widget</a></li>
+                    <li class="Sublilist"><a href="slider.html">Slider</a></li>
+                    <li class="Sublilist"><a href="tree_view.html">Tree View</a></li>
+                    <li class="Sublilist"><a href="nestable.html">Nestable</a></li>
+                    <li class="Sublilist"><a href="grids.html">Grids</a></li>
+                    <li class="Sublilist"><a href="calendar.html">Calender</a></li>
+                    <li class="Sublilist"><a href="draggable_portlet.html">Draggable Portlet</a></li>
+                </ul>
+            </li>
+            <li class="lilist">
+                <a href="fontawesome.html">
+                    <i class="fa fa-bullhorn"></i>
+                    <span>Fontawesome </span>
+                </a>
+            </li>
+            <li class="sub-menu lilist" id="P_">
+                <a href="javascript:;">
+                    <i class="fa fa-th"></i>
+                    <span>Data Tables</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist"><a href="basic_table.html">Basic Table</a></li>
+                    <li class="Sublilist"><a href="responsive_table.html">Responsive Table</a></li>
+                    <li class="Sublilist" id="P_Table"><a href="/Home/Table">Dynamic Table</a></li>
+                    <li class="Sublilist"><a href="editable_table.html">Editable Table</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist" id="P_Home">
+                <a href="javascript:;">
+                    <i class="fa fa-tasks"></i>
+                    <span>Form Components</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist" id="P_Form"><a href="/Home/Form">Form</a></li>
+                    <li class="Sublilist"><a href="advanced_form.html">Advanced Components</a></li>
+                    <li class="Sublilist"><a href="form_wizard.html">Form Wizard</a></li>
+                    <li class="Sublilist"><a href="form_validation.html">Form Validation</a></li>
+                    <li class="Sublilist"><a href="file_upload.html">Muliple File Upload</a></li>
+                    <li class="Sublilist"><a href="dropzone.html">Dropzone</a></li>
+                    <li class="Sublilist"><a href="inline_editor.html">Inline Editor</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist" id="P_Email">
+                <a href="javascript:;">
+                    <i class="fa fa-envelope"></i>
+                    <span>Mail </span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist" id="P_Inbox"><a href="/Email/Inbox">Inbox</a></li>
+                    <li class="Sublilist" id="P_Compose"><a href="/Email/Compose">Compose Mail</a></li>
+                    <li class="Sublilist" id="P_Mail"><a href="/Email/Mail">View Mail</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist">
+                <a href="javascript:;">
+                    <i class=" fa fa-bar-chart-o"></i>
+                    <span>Charts</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist"><a href="morris.html">Morris</a></li>
+                    <li class="Sublilist"><a href="chartjs.html">Chartjs</a></li>
+                    <li class="Sublilist"><a href="flot_chart.html">Flot Charts</a></li>
+                    <li class="Sublilist"><a href="c3_chart.html">C3 Chart</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist">
+                <a href="javascript:;">
+                    <i class=" fa fa-bar-chart-o"></i>
+                    <span>Maps</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist"><a href="google_map.html">Google Map</a></li>
+                    <li class="Sublilist"><a href="vector_map.html">Vector Map</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu lilist">
+                <a href="javascript:;">
+                    <i class="fa fa-glass"></i>
+                    <span>Extra</span>
+                </a>
+                <ul class="sub">
+                    <li class="Sublilist"><a href="blank.html">Blank Page</a></li>
+                    <li class="Sublilist"><a href="profile.html">Profile</a></li>
+                    <li class="Sublilist"><a href="invoice.html">Invoice</a></li>
+                    <li class="Sublilist"><a href="pricing_table.html">Pricing Table</a></li>
+                    <li class="Sublilist"><a href="timeline.html">Timeline</a></li>
+                    <li class="Sublilist"><a href="gallery.html">Media Gallery</a></li>
+                    <li class="Sublilist"><a href="registration.html">Registration</a></li>
+                </ul>
+            </li>
+        </ul>*@
+</div>

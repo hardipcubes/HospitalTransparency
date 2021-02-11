@@ -1,0 +1,89 @@
+﻿@model List<HospitalTransparency.Models.Model.DisplayMenuModel>
+@{
+    List<string> menucolor = new List<string>();
+    menucolor.Add("btn btn-default btn-xs");
+    menucolor.Add("btn btn-primary btn-xs");
+    menucolor.Add("btn btn-success btn-xs");
+    menucolor.Add("btn btn-info btn-xs");
+    menucolor.Add("btn btn-warning btn-xs");
+    menucolor.Add("btn btn-danger btn-xs");
+    for (int i = 0; i < 10; i++)
+    {
+        menucolor.Add("btn btn-default btn-xs");
+    }
+}
+@foreach (var item in Model.ToList().OrderBy(m => m.OrderBy))
+{
+    string mrg = ((item.MenuLevel + 1) * 10).ToString() + "px";
+    int lvl = item.MenuLevel + 1;
+    <tr>
+        <td style="display:none;">1</td>
+        <td>
+
+            <span class="@menucolor[lvl]" style="margin-left: @mrg;">
+                @lvl.@Model[0].SrNo => @item.MenuName
+            </span>
+            @{
+                Model[0].SrNo = Model[0].SrNo + 1;
+            }
+            <input type="hidden" id="MenuId" value="@item.MenuId" />
+        </td>
+        <td class="center">
+            <input type="checkbox" id="@item.MenuId+All" name="All" onclick="checkallthis('@item.MenuId','p');ManageRootMenu('@item.MenuId');" />
+            <label for="@item.MenuId+All"></label>
+        </td>
+        <td class="center">
+            @if (item.Children.Count() > 0)
+            {
+                <input type="checkbox" id="@item.MenuId+Add" name="Add" />
+                <label for="@item.MenuId+Add"></label>
+            }
+            else
+            {
+                <input type="checkbox" id="@item.MenuId+Add" name="Add" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                <label for="@item.MenuId+Add"></label>
+            }
+        </td>
+        <td class="center">
+            @if (item.Children.Count() > 0)
+            {
+                <input type="checkbox" id="@item.MenuId+Edit" name="Edit" />
+                <label for="@item.MenuId+Edit"></label>
+            }
+            else
+            {
+                <input type="checkbox" id="@item.MenuId+Edit" name="Edit" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                <label for="@item.MenuId+Edit"></label>
+            }
+        </td>
+        <td class="center">
+            @if (item.Children.Count() > 0)
+            {
+                <input type="checkbox" id="@item.MenuId+Delete" name="Delete" />
+                <label for="@item.MenuId+Delete"></label>
+            }
+            else
+            {
+                <input type="checkbox" id="@item.MenuId+Delete" name="Delete" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                <label for="@item.MenuId+Delete"></label>
+            }
+        </td>
+        <td class="center">
+            @if (item.Children.Count() > 0)
+            {
+                <input type="checkbox" id="@item.MenuId+Display" name="Display" />
+                <label for="@item.MenuId+Display"></label>
+            }
+            else
+            {
+                <input type="checkbox" id="@item.MenuId+Display" name="Display" onclick="checkallthis('@item.MenuId','c');ManageRootMenu('@item.MenuId');" />
+                <label for="@item.MenuId+Display"></label>
+            }
+        </td>
+    </tr>
+
+    if (item.Children.Count() > 0)
+    {
+        @Html.Partial("P_SubMain", item.Children)
+    }
+}

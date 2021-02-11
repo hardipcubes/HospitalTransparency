@@ -1,0 +1,73 @@
+﻿@model HospitalTransparency.Models.Model.MenuModel
+
+@using (Ajax.BeginForm("Menu", "Menu", FormMethod.Post, new AjaxOptions { OnBegin = "ValidateImage();", OnSuccess = "Onsuccess();fnReset();OnComplete();", OnComplete = "datatablelist();", InsertionMode = InsertionMode.Replace, UpdateTargetId = "P_List" }, new { @class = "cmxform form-horizontal", @id = "commentForm", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.MenuId)
+    <div class="form-group ">
+
+        <label for="MenusName" class="control-label col-lg-2">Menu Name</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(m => m.MenusName, new { @required = "required", @class = "form-control ", @name = "Menu Name", @maxlength = "200", @minlength = "2", @title = "Menu name is required." })
+        </div>
+
+        <label for="ControllerName" class="control-label col-lg-2">Controller Name</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(m => m.ControllerName, new { @class = "form-control", @name = "Controller Name", @maxlength = "200" })
+        </div>
+    </div>
+
+    <div class="form-group ">
+
+        <label for="ActionName" class="control-label col-lg-2">Action Name</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(m => m.ActionName, new { @class = "form-control", @name = "Action Name", @maxlength = "200" })
+        </div>
+
+        <label for="ParentMenuId" class="control-label col-lg-2">Parent Menu</label>
+        <div class="col-lg-3">
+            @Html.DropDownListFor(m => m.ParentId, (IEnumerable<SelectListItem>)ViewBag.ParentMenuList, "ROOT", new { @name = "ParentMenuId", @class = "form-control", @title = "Parent menu is required." })
+        </div>
+
+    </div>
+
+    <div class="form-group ">
+
+        <label for="OrderBy" class="control-label col-lg-2">Order By</label>
+        <div class="col-lg-3">
+            @Html.TextBoxFor(m => m.OrderBy, new { @required = "required", @class = "form-control numeric", @name = "OrderBy", @maxlength = "3", @minlength = "1", @title = "Numeric order by is required." })
+        </div>
+
+        <label for="GetMenuicons" class="control-label col-lg-2">Menu Icon</label>
+        <div class="col-lg-3">
+            <a id="GetMenuicons" name="GetMenuicons" data-toggle="modal" data-target="#myModal" style="line-height: 30px; cursor: pointer; color:blueviolet;">Select Menu Icon</a>
+            @{
+                var IconName = ViewBag.Iconname;
+            }
+            <label id="selectedicons"><i id="selectedi" class="@IconName"></i></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            <button class="btn btn-primary ink-reaction" type="submit">Save</button>
+            <button class="btn btn-default ink-reaction" type="button" onclick="fnReset();OnComplete();scrolltop();">Cancel</button>
+        </div>
+    </div>
+}
+
+<div class="modal iconmodal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title modal_title" id="myModalLabel">
+                    Menu Icon
+                </h4>
+            </div>
+            <div class="modal-body" style="position: relative; padding: 20px; height: 60%; overflow: auto;">
+                <div id="menuicons">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

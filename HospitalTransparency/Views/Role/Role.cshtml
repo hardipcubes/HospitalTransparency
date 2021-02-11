@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = "Role";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="breadcrumbs-alt">
+            <li>
+                <a href="/Home/Index">Home</a>
+            </li>
+            <li>
+                <a href="#">Role Rights</a>
+            </li>
+            <li>
+                <a class="current" href="#">Manage Role</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="CheckActive" id="@ViewBag.ParentMenuId+@ViewBag.MenuId">
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Role
+                    <span class="tools pull-right">
+                        <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        <a class="fa fa-times" href="javascript:;"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="form">
+                        <div id="P_Main">
+                            @Html.Partial("P_Main")
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Role Listing
+                    <span class="tools pull-right">
+                        <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        <a class="fa fa-times" href="javascript:;"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="adv-table">
+                        <div id="P_List">
+                            @Html.Partial("P_List")
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/jquery-1.8.3.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        datatablelist();
+        OnComplete();
+    });
+
+    var totalremain = 200 - parseInt($('#RoleDesc').val().length);
+
+    $('#textarea_desc').text('Characters left: ' + totalremain);
+    var entercount = 0;
+    $("#RoleDesc").on('keyup', function (e) {
+        var str = "e";
+        var mycode = str.charCodeAt();
+        var code = e.keyCode || e.which;
+
+        if ($(this).val().length == 0) {
+            entercount = 0;
+        }
+        if (code == 13) {
+            entercount++;
+        }
+        var left = parseInt($(this).attr('maxlength')) - ($(this).val().length + entercount);
+        if (left < 0) {
+            left = 0;
+        }
+        $('#textarea_desc').text('Characters left: ' + left);
+    })
+
+    function SetActiveDeactive(id, active) {
+        var msg = "activate";
+        if (active == 'Y') {
+            msg = "de-activate";
+        }
+        var confimMessage = "Are you sure you want to " + msg + " this role?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                url: '@Url.Action("SetActiveDeactive", "Role")',
+                datatype: 'html',
+                data: { RoleId: id },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    var message = "Role " + msg + "d successfully. :)";
+                    notie.alert(1, message, 2)
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+    };
+
+    function DeleteRole(RoleId) {
+        var confimMessage = "Are you sure you want to delete this role?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                datatype: 'html',
+                url: '@Url.Action("DeleteRole", "Role")',
+                data: { RoleId: RoleId },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    fnReset();
+                    OnComplete();
+                    var message = "Role deleted successfully. :)";
+                    notie.alert(1, message, 2)
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+    }
+</script>
+
+<!-- Paging , Document ready  OnComplete  -->
+<script type="text/javascript">
+
+    function datatablelist() {
+        $('#errormsg').empty();
+        $("#roleTable").dataTable().fnDestroy();
+        $('#roleTable').dataTable({
+            "filter": true,
+            "aoColumnDefs": [
+               { 'bSortable': false, 'aTargets': [0, 4] }
+            ],
+            "aoColumns": [
+            { "sWidth": "25%" },
+            { "sWidth": "30%" },
+            { "sWidth": "25%" },
+            { "sWidth": "20%" }
+            ],
+            "bPaginate": true,
+            "bLengthChange": true,
+            "pagingType": "full_numbers",
+            "orderClasses": false,
+            "order": [],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "@Url.Action("fnPaging")",
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                aoData.push(
+                    { "name": "RoleName", "value": '' },
+                    { "name": "RoleDesc", "value": '' },
+                    { "name": "Active", "value": '' },
+                    { "name": "Action", "value": '' });
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": "@Url.Action("fnPaging")",
+                    "data": aoData,
+                    "success": function (sb) {
+                        oldfeeds = sb.recordsTotal;
+                        fnCallback(sb);
+                        $("#roleTable").show();
+                        $('#_manualcount').empty();
+                        $('#_manualcount').append('New(0), Retrived(' + oldfeeds + ')');
+                    },
+                    error: function (xhr, textStatus, error) {
+                        if (typeof console == "object") {
+                            console.log(xhr.status + "," + xhr.responseText + "," + textStatus + "," + error);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function OnComplete() {
+        $('#textarea_desc').text('');
+        $('#textarea_desc').text('Characters left: 200');
+    }
+
+    function DeleteAll() {
+        var roleIds = "";
+        roleIds = getCheckedBoxes("checkbox");
+        if (roleIds == "") {
+            notie.alert(3, 'Please select roles to delete. :(', 2);
+            return false;
+        }
+        var confimMessage = "Are you sure you want to delete these selected roles?";
+        notie.confirm(confimMessage, 'Yes', 'No', function () {
+            $.ajax({
+                type: 'Post',
+                datatype: 'html',
+                url: '@Url.Action("DeleteAll")',
+                data: { roleIds: roleIds },
+                success: function (i) {
+                    $('#P_List').empty();
+                    $('#P_List').append(i);
+                    datatablelist();
+                    fnReset();
+                    Onsuccess();
+                }
+            });
+        }, function () {
+            notie.alert(3, 'Aw, why not? :(', 2)
+        })
+    }
+
+    function getCheckedBoxes(chkboxName) {
+        debugger;
+        var checkboxes = document.getElementsByClassName(chkboxName);
+        var checkboxesChecked = "";
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                checkboxesChecked = checkboxesChecked + (checkboxes[i].id.replace('chk_', '')) + ',';
+            }
+        }
+        return checkboxesChecked;
+    }
+</script>
+
